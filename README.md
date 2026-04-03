@@ -163,7 +163,6 @@ This plot provides historical context by showing long-run team win patterns from
 
 ## Notes
 
-- The root `IPL.csv` file is intentionally not stored in the repo
 - Historical data is expected from Kaggle at runtime
 - The 2026 fixture file in this repo is used for future-schedule context, not model training
 

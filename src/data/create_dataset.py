@@ -12,6 +12,7 @@ import os
 import sys
 import re
 import json
+from glob import glob
 import pandas as pd
 import numpy as np
 
@@ -248,8 +249,21 @@ def save_player_stats_csv(player_stats_df: pd.DataFrame):
 
 def resolve_ipl_csv_path(dataset_path: str | None = None) -> str:
     """Resolve the IPL source CSV path from CLI arg, env var, or config default."""
-    path = dataset_path or IPL_SOURCE_CSV
-    return os.path.abspath(os.path.expanduser(path))
+    candidate = os.path.abspath(os.path.expanduser(dataset_path or IPL_SOURCE_CSV))
+    if os.path.exists(candidate):
+        return candidate
+
+    kaggle_matches = sorted(
+        glob(
+            os.path.expanduser(
+                "~/.cache/kagglehub/datasets/chaitu20/ipl-dataset2008-2025/versions/*/IPL.csv"
+            )
+        )
+    )
+    if kaggle_matches:
+        return kaggle_matches[-1]
+
+    return candidate
 
 
 def _to_legacy_match_rows(matches_df: pd.DataFrame) -> list:
